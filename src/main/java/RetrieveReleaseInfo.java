@@ -62,10 +62,9 @@ public class RetrieveReleaseInfo {
 
 		FileWriter fileWriter = null;
 		try {
-			String outName = projName + csvPath; //Name of CSV for output
 
-			// Inizializzazione della prima riga del file
-			fileWriter = new FileWriter(outName);
+            // Inizializzazione della prima riga del file
+			fileWriter = new FileWriter(csvPath);
 			fileWriter.append("Index,Version ID,Version Name,Date");
 			fileWriter.append("\n");
 

@@ -17,7 +17,7 @@ public class RetrieveLOCForVersions {
 
     /** @getLOCForVersion: genera un file CSV a partire dal @localRepositoryPath
      * Strutturato: VERSIONE | NOME CLASSE | LOC */
-    public static void getLOCForVersions(String localRepositoryPath, String csvFilePath) {
+    public static void getLOCForVersions(ProjectName projectName,String localRepositoryPath, String csvFilePath) {
         try {
 
             // Leggo il file CSV per ottenere le versioni
@@ -34,7 +34,7 @@ public class RetrieveLOCForVersions {
                     // Ottenere il numero di righe di codice per ogni classe nella versione specificata
                     List<LOCData> locDataList = getLOCForVersion(localRepositoryPath);
                     // Scrivi i dati sulle LOC su un file CSV
-                    writeLOCDataToCSV(version.getVersionName(), locDataList);
+                    writeLOCDataToCSV(projectName, version.getVersionName(), locDataList);
                 }
             } else {
                 System.out.println("Nessuna versione trovata nel file CSV");
@@ -142,7 +142,7 @@ public class RetrieveLOCForVersions {
                                     .replaceFirst(repositoryPath + "/", "") // Rimuovi il percorso del repository
                                     .replace(".java", "") // Rimuovi l'estensione del file
                                     .replace("/", "."); // Sostituisci i separatori di percorso con punti
-                            System.out.println(className + " : " + loc);
+                            //System.out.println(className + " : " + loc);
                             locDataList.add(new LOCData(className, (int) loc));
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -154,8 +154,8 @@ public class RetrieveLOCForVersions {
         return locDataList;
     }
 
-    private static void writeLOCDataToCSV(String versionName, List<LOCData> locDataList) throws IOException {
-        String csvFilePath = "./Data-Set.csv";
+    private static void writeLOCDataToCSV(ProjectName projectName, String versionName, List<LOCData> locDataList) throws IOException {
+        String csvFilePath = "./" + projectName + "Data-Set.csv";
         try (FileWriter writer = new FileWriter(csvFilePath, true)) {
             for (LOCData locData : locDataList) {
                 writer.append(versionName).append(",").append(locData.getFileName()).append(",").append(String.valueOf(locData.getLoc())).append("\n");
