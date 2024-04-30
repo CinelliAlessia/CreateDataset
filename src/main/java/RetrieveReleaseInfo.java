@@ -3,8 +3,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.*;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,7 +17,7 @@ public class RetrieveReleaseInfo {
 	public static Integer numVersions;
 
 	/** getReleaseInfo Crea il file CSV con index, version ID, versionName, Date*/
-	public static void getReleaseInfo(String projName) throws IOException, JSONException {
+	public static void getReleaseInfo(ProjectName projName, String csvPath) throws IOException, JSONException {
 
 		//Fills the arraylist with releases dates and orders them
 		//Ignores releases with missing dates
@@ -64,7 +62,7 @@ public class RetrieveReleaseInfo {
 
 		FileWriter fileWriter = null;
 		try {
-			String outName = projName + "VersionInfo.csv"; //Name of CSV for output
+			String outName = projName + csvPath; //Name of CSV for output
 
 			// Inizializzazione della prima riga del file
 			fileWriter = new FileWriter(outName);
@@ -111,7 +109,6 @@ public class RetrieveReleaseInfo {
 
 		releaseNames.put(dateTime, name);
 		releaseID.put(dateTime, id);
-		return;
-	}
+    }
 
 }
