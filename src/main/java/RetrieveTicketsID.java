@@ -13,7 +13,7 @@ public class RetrieveTicketsID {
 
     /** Recupera dalla url query tutti gli ID dei ticket di tipo BUG, con stato CLOSED or RESOLVED e risoluzione FIXED
      * Di tutti gli oggetti recuperati, prende i campi: key, resolutiondate, versions */
-    public static void getTicketsID(String projName) throws IOException, JSONException {
+    public static void getTicketsID(ProjectName projName) throws IOException, JSONException {
         int j, i = 0, total;
         //Get JSON API for closed bugs w/ AV in the project
         do {
