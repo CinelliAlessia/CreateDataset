@@ -38,6 +38,14 @@
             <artifactId>json</artifactId>
             <version>20240303</version>
         </dependency>
+
+        <!-- Binding SLF4J -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.4.12</version>
+        </dependency>
+
     </dependencies>
 
 </project>
