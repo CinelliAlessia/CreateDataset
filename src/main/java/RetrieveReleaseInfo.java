@@ -15,6 +15,8 @@ public class RetrieveReleaseInfo {
 	public static HashMap<LocalDateTime, String> releaseID;
 	public static ArrayList<LocalDateTime> releases;
 	public static Integer numVersions;
+	private static final String splitChar = ",";
+
 
 	/** getReleaseInfo Crea il file CSV con index, version ID, versionName, Date*/
 	public static void getReleaseInfo(ProjectName projName, String csvPath) throws IOException, JSONException {
@@ -74,11 +76,11 @@ public class RetrieveReleaseInfo {
 			for (int i = 0; i < releases.size(); i++) {
 				int index = i + 1;
 				fileWriter.append(Integer.toString(index));
-				fileWriter.append(",");
+				fileWriter.append(splitChar);
 				fileWriter.append(releaseID.get(releases.get(i)));
-				fileWriter.append(",");
+				fileWriter.append(splitChar);
 				fileWriter.append(releaseNames.get(releases.get(i)));
-				fileWriter.append(",");
+				fileWriter.append(splitChar);
 				fileWriter.append(releases.get(i).toString());
 				fileWriter.append("\n");
 			}
