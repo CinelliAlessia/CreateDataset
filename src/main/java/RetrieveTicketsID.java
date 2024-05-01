@@ -1,3 +1,4 @@
+import entity.TicketsIDBuggy;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +15,8 @@ public class RetrieveTicketsID {
     /** Recupera dalla url query tutti gli ID dei ticket di tipo BUG, con stato CLOSED or RESOLVED e risoluzione FIXED
      * Di tutti gli oggetti recuperati, prende i campi: key, resolutiondate, versions */
     public static void getTicketsID(ProjectName projName) throws IOException, JSONException {
+        TicketsIDBuggy ticketsID = new TicketsIDBuggy();
+
         int j, i = 0, total;
         //Get JSON API for closed bugs w/ AV in the project
         do {
@@ -31,7 +34,7 @@ public class RetrieveTicketsID {
 
             for (; i < total && i < j; i++) { //Iterate through each bug
                 String key = issues.getJSONObject(i % maxResults).get("key").toString();
-                System.out.println(key);
+                ticketsID.setTicketId(key);
             }
 
         } while (i < total); // Continua il ciclo fin quando non sono stati visti tutti i ticket
