@@ -1,3 +1,4 @@
+import controller.*;
 import entity.ClassLOC;
 import entity.VersionInfo;
 import exception.NameProjectError;
@@ -9,27 +10,30 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Start {
     private static final ProjectName projectName = ProjectName.BOOKKEEPER; // "ZOOKEEPER" or "BOOKKEEPER"
     public static final String prefixNameVersione = "release-";
-    private static String datasetName;
+    private static String datasetFilename;
     private static final String splitChar = ",";
+    private static ArrayList<String> columnName;
 
     public static void main(String[] string) {
 
-        datasetName = projectName + "Dataset.csv";
-        if(!initializeDataset(datasetName)){
+        datasetFilename = projectName + "_Dataset.csv";
+        if(!initializeDataset(datasetFilename)){
             return;
         }
 
         try {
-            RetrieveReleaseInfo.getReleaseInfo(projectName, getVersionInfoFilePath()); // Crea il CSV con le informazioni sulle versioni
-            RetrieveTicketsID.getTicketsID(projectName);  // Crea e popola la entity TicketsIDBuggy id dei ticket di tipo bug
+            RetrieveReleaseInfo retriveReleaseInfo = new RetrieveReleaseInfo();
+            // Crea il CSV con le informazioni sulle versioni
+            retriveReleaseInfo.getReleaseInfo(projectName, getVersionInfoFilePath());
+
+            // Crea e popola la entity TicketsIDBuggy id dei ticket di tipo bug
+            RetrieveTicketsID retrieveTicketsID = new RetrieveTicketsID();
+            retrieveTicketsID.getTicketsID(projectName);
 
             popolateDataset();
 
@@ -42,18 +46,20 @@ public class Start {
 
     /** Tronca il dataset se già esiste e inserisce header */
     private static Boolean initializeDataset(String csvDatasetName) {
+        initialize();
+
         if (!deleteIfExists(csvDatasetName)) {
             return false;
         }
         FileWriter writer = null;
 
         try {
+            // Scrittura header nel file
             writer = new FileWriter(csvDatasetName);
-            writer.append("Version");
-            writer.append(splitChar);
-            writer.append("File Name");
-            writer.append(splitChar);
-            writer.append("LOC");
+            for (String name : columnName) {
+                writer.append(name);
+                writer.append(splitChar);
+            }
             writer.append("\n");
 
         } catch (IOException e) {
@@ -94,7 +100,7 @@ public class Start {
                 System.out.println("Nessuna versione trovata nel file CSV");
             }
         } catch (FileNotFoundException e) {
-            System.out.println("Il file " + datasetName + " non esiste");
+            System.out.println("Il file " + datasetFilename + " non esiste");
         } catch (IOException e) {
             System.out.println("Errore durante la lettura del file CSV: " + e.getMessage());
         } catch (GitAPIException e) {
@@ -105,8 +111,10 @@ public class Start {
 
 
     private static void executeOperationForVersion(VersionInfo version){
+        RetrieveLOCForVersions retrieveLOCForVersions = new RetrieveLOCForVersions();
+
         // Ottenere il numero di righe di codice per ogni classe nella versione specificata
-        List<ClassLOC> locDataList = RetrieveLOCForVersions.getLOCForVersion(getLocalRepositoryPath());
+        List<ClassLOC> locDataList = retrieveLOCForVersions.getLOCForVersion(getLocalRepositoryPath());
 
         // Scrivi i dati sulle LOC su un file CSV
         writeLOCDataToCSV(version.getVersionID(), locDataList);
@@ -197,7 +205,7 @@ public class Start {
 
     private static void writeLOCDataToCSV(int versionID, List<ClassLOC> locDataList) {
 
-        try (FileWriter writer = new FileWriter(datasetName, true)) {
+        try (FileWriter writer = new FileWriter(datasetFilename, true)) {
             for (ClassLOC locData : locDataList) {
                 writer
                         .append(String.valueOf(versionID))
@@ -212,4 +220,10 @@ public class Start {
         }
     }
 
+    public static void initialize() {
+        columnName = new ArrayList<>();
+        columnName.add("Version ID");
+        columnName.add("File Name");
+        columnName.add("LOC");
+    }
 }

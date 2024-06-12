@@ -1,5 +1,6 @@
+package controller;
+
 import entity.ClassLOC;
-import entity.VersionInfo;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.ObjectId;
@@ -15,12 +16,11 @@ import java.util.*;
 
 public class RetrieveLOCForVersions {
 
-
     /** @getLOCForVersion: Questo metodo ottiene il numero di righe di codice per ogni file Java
      * in una specifica versione. Per ogni commit nel repository, ottiene l'albero del commit e
      * percorre l'albero per trovare i file Java. Per ogni file Java, calcola il numero di righe
      * di codice e aggiunge queste informazioni a una lista di oggetti LOCData.*/
-    private static List<ClassLOC> getLOCForVersionCommit(String repositoryPath) {
+    private List<ClassLOC> getLOCForVersionCommit(String repositoryPath) {
 
         List<ClassLOC> locDataList = new ArrayList<>();
         try (
@@ -64,7 +64,7 @@ public class RetrieveLOCForVersions {
      * utilizzando il comando Git checkout. Questo cambia lo stato del repository Git alla versione
      * specificata. Quindi, quando getLOCForVersion viene chiamato, calcola le LOC per la versione del
      * progetto che è attualmente in checkout */
-    public static List<ClassLOC> getLOCForVersion(String repositoryPath) {
+    public List<ClassLOC> getLOCForVersion(String repositoryPath) {
         List<ClassLOC> locDataList = new ArrayList<>();
         File projectDir = new File(repositoryPath);
 

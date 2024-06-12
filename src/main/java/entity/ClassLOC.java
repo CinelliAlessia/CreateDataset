@@ -1,12 +1,12 @@
 package entity;
 
 public class ClassLOC {
-    private final String className;
-    private final int loc;
+    private String className;
+    private int loc;
 
     public ClassLOC(String fileName, int loc) {
         this.className = fileName;
-        this.loc = loc;
+        setLoc(loc);
     }
 
     public String getFileName() {
@@ -15,5 +15,9 @@ public class ClassLOC {
 
     public int getLoc() {
         return loc;
+    }
+
+    private void setLoc(int loc){
+        this.loc = loc;
     }
 }

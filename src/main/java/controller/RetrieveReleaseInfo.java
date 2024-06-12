@@ -1,3 +1,5 @@
+package controller;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,22 +13,30 @@ import java.util.HashMap;
 
 public class RetrieveReleaseInfo {
 
-	public static HashMap<LocalDateTime, String> releaseNames;
-	public static HashMap<LocalDateTime, String> releaseID;
-	public static ArrayList<LocalDateTime> releases;
-	public static Integer numVersions;
-	private static final String splitChar = ",";
+	private  HashMap<LocalDateTime, String> releaseNames;
+	private  HashMap<LocalDateTime, String> releaseID;
+	private  ArrayList<LocalDateTime> releases;
+	private  Integer numVersions;
+	private String splitChar;
 
+	public RetrieveReleaseInfo() {
+		this.releaseNames = new HashMap<>();
+		this.releaseID = new HashMap<>();
+		this.releases = new ArrayList<>();
+		this.numVersions = 0;
+		this.splitChar = ",";
+	}
 
 	/** getReleaseInfo Crea il file CSV con index, version ID, versionName, Date*/
-	public static void getReleaseInfo(ProjectName projName, String csvPath) throws IOException, JSONException {
+	public void getReleaseInfo(ProjectName projName, String csvPath) throws IOException, JSONException {
 
 		//Fills the arraylist with releases dates and orders them
 		//Ignores releases with missing dates
-		releases = new ArrayList<>();
+		CommonResources commonResources = new CommonResources();
+
 
 		String url = "https://issues.apache.org/jira/rest/api/2/project/" + projName;
-		JSONObject json = CommonResources.readJsonFromUrl(url);
+		JSONObject json = commonResources.readJsonFromUrl(url);
 
 		// Versions è un array che contiene campi di una singola versione
 		JSONArray versions = json.getJSONArray("versions");
@@ -100,7 +110,7 @@ public class RetrieveReleaseInfo {
 		}
     }
 
-	public static void addRelease(String strDate, String name, String id) {
+	public void addRelease(String strDate, String name, String id) {
 
 		LocalDate date = LocalDate.parse(strDate);
 		LocalDateTime dateTime = date.atStartOfDay();

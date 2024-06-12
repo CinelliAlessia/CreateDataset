@@ -9,9 +9,8 @@ import java.util.List;
 public class VersionInfo {
     private final String versionName;
     private final int versionID;
-
     private Date versionDate;
-    private List<RevCommit> commits = new ArrayList<>();
+    private final List<RevCommit> commits = new ArrayList<>();
 
     public VersionInfo(String versionName, int versionID, Date versionDate) {
         this.versionName = versionName;
